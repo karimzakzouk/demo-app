@@ -8,13 +8,7 @@ log = logging.getLogger("demo-app")
 
 app = FastAPI(title="demo-app", version="1.0.0")
 
-# Use the correct environment variable name and provide a clear error if missing
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    log.error("Environment variable DATABASE_URL is not set. Application cannot start properly.")
-    # Optionally set a placeholder or raise an exception; here we raise to fail fast
-    raise RuntimeError("Missing required environment variable: DATABASE_URL")
-
+DATABASE_URL = os.environ["DATABASE_URLL"]
 API_KEY = os.environ.get("API_KEY", "default-key")
 
 @app.on_event("startup")
