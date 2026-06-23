@@ -8,7 +8,7 @@ log = logging.getLogger("demo-app")
 
 app = FastAPI(title="demo-app", version="1.0.0")
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./demo.db")
+DATABASE_URL = os.environ.get("DATABASE_URLL", "sqlite:///./demo.db")
 API_KEY = os.environ.get("API_KEY", "default-key")
 
 @app.on_event("startup")
