@@ -34,6 +34,13 @@ async def pay(amount: int = 100) -> dict[str, str]:
     fee = amount * 0.02
     return {"status": "processed", "amount": str(amount), "fee": str(fee)}
 
+@app.get("/divide")
+async def divide(a: int = 10, b: int = 1) -> dict[str, str]:
+    """Divide a by b. BUG: no zero check — calling /divide?a=10&b=0 crashes."""
+    log.info("Dividing %s by %s", a, b)
+    result = a / b  # ZeroDivisionError when b=0
+    return {"status": "ok", "result": str(result)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
