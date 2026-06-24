@@ -1,3 +1,5 @@
+import nonexistent_xyz_module  # BUG: testing Sentinel autonomous fix
+
 """demo-app — a small FastAPI service for testing K8s deployments."""
 from __future__ import annotations
 import os, logging
