@@ -8,8 +8,7 @@ log = logging.getLogger("demo-app")
 
 app = FastAPI(title="demo-app", version="1.0.0")
 
-# Fixed typo in environment variable name
-DATABASE_URL = os.environ["DATABASE_URL"]
+DATABASE_URL = os.environ["DATABASE_URLL"]
 API_KEY = os.environ.get("API_KEY", "default-key")
 
 @app.on_event("startup")
