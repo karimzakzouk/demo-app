@@ -8,13 +8,12 @@ log = logging.getLogger("demo-app")
 
 app = FastAPI(title="demo-app", version="1.0.0")
 
-# Fixed typo in environment variable name
-DATABASE_URL = os.environ["DATABASE_URL"]
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///demo.db")
 API_KEY = os.environ.get("API_KEY", "default-key")
 
 @app.on_event("startup")
 async def _startup() -> None:
-    log.info("demo-app starting up")
+    log.info("demo-app starting up — DATABASE_URL=%s", DATABASE_URL)
 
 @app.get("/healthz")
 async def healthz() -> dict[str, str]:
