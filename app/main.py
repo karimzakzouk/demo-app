@@ -8,9 +8,12 @@ log = logging.getLogger("demo-app")
 
 app = FastAPI(title="demo-app", version="1.0.0")
 
-# Fixed typo in environment variable name
-DATABASE_URL = os.environ["DATABASE_URL"]
-API_KEY = os.environ.get("API_KEY", "default-key")
+# Use getenv with a default and warn if not set
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    log.warning("DATABASE_URL environment variable is not set; using placeholder value")
+    DATABASE_URL = "postgres://user:pass@localhost:5432/db"
+API_KEY = os.getenv("API_KEY", "default-key")
 
 @app.on_event("startup")
 async def _startup() -> None:
@@ -36,9 +39,12 @@ async def pay(amount: int = 100) -> dict[str, str]:
 
 @app.get("/divide")
 async def divide(a: int = 10, b: int = 1) -> dict[str, str]:
-    """Divide a by b. BUG: no zero check — calling /divide?a=10&b=0 crashes."""
+    """Divide a by b. Returns error message for division by zero instead of crashing."""
     log.info("Dividing %s by %s", a, b)
-    result = a / b  # ZeroDivisionError when b=0
+    if b == 0:
+        log.error("Division by zero attempted")
+        return {"status": "error", "message": "division by zero is not allowed"}
+    result = a / b
     return {"status": "ok", "result": str(result)}
 
 if __name__ == "__main__":
