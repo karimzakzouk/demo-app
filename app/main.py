@@ -55,7 +55,7 @@ async def format_price(price: int = 100) -> dict[str, str]:
     log.info("Formatting price %s", price)
     # BUG: TypeError — can't concatenate str and int
     # /format?price=50 crashes with "can only concatenate str (not "int") to str"
-    label = "Price: $" + price + " USD"
+    label = "Price: $" + str(price) + " USD"
     return {"status": "ok", "label": label}
 
 @app.get("/items")
