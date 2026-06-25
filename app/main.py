@@ -46,8 +46,13 @@ async def get_user(user_id: int = 1) -> dict[str, str]:
     log.info("Fetching user %s", user_id)
     users = {1: "Alice", 2: "Bob"}
     # BUG: KeyError when user_id is not 1 or 2 (e.g. /user?user_id=99)
-    name = users[user_id]
-    return {"status": "ok", "user_id": str(user_id), "name": name}
+    if user_id in users:
+        name = users[user_id]
+        status = "ok"
+    else:
+        name = ""
+        status = "error"
+    return {"status": status, "user_id": str(user_id), "name": name}
 
 @app.get("/format")
 async def format_price(price: int = 100) -> dict[str, str]:
