@@ -1,7 +1,7 @@
 """demo-app — a small FastAPI service for testing K8s deployments."""
 from __future__ import annotations
 import os, logging
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("demo-app")
@@ -37,7 +37,10 @@ async def pay(amount: int = 100) -> dict[str, str]:
 async def divide(a: int = 10, b: int = 1) -> dict[str, str]:
     """Divide a by b. BUG: no zero check — calling /divide?a=10&b=0 crashes."""
     log.info("Dividing %s by %s", a, b)
-    result = a / b  # ZeroDivisionError when b=0
+    if b == 0:
+        raise HTTPException(status_code=400, detail="division by zero
+""
+    result = a / b
     return {"status": "ok", "result": str(result)}
 
 if __name__ == "__main__":
