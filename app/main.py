@@ -1,7 +1,7 @@
 """demo-app — a small FastAPI service for testing K8s deployments."""
 from __future__ import annotations
 import os, logging
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("demo-app")
