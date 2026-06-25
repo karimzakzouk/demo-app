@@ -37,7 +37,9 @@ async def pay(amount: int = 100) -> dict[str, str]:
 async def divide(a: int = 10, b: int = 1) -> dict[str, str]:
     """Divide a by b. BUG: no zero check — calling /divide?a=10&b=0 crashes."""
     log.info("Dividing %s by %s", a, b)
-    result = a / b  # ZeroDivisionError when b=0
+    if b == 0:
+        return {"status": "error", "detail": "division by zero"}
+    result = a / b
     return {"status": "ok", "result": str(result)}
 
 if __name__ == "__main__":
