@@ -1,7 +1,7 @@
 """demo-app — a small FastAPI service for testing K8s deployments."""
 from __future__ import annotations
 import os, logging
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("demo-app")
@@ -64,6 +64,8 @@ async def get_items(index: int = 0) -> dict[str, str]:
     log.info("Fetching item at index %s", index)
     items = ["apple", "banana", "cherry"]
     # BUG: IndexError when index >= 3 (e.g. /items?index=10)
+    if index >= len(items):
+        raise HTTPException(status_code=404, detail="Item not found")
     item = items[index]
     return {"status": "ok", "index": str(index), "item": item}
 
