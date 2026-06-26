@@ -63,11 +63,12 @@ async def get_items(index: int = 0) -> dict[str, str]:
     """Get item by index. BUG: no bounds check on the list."""
     log.info("Fetching item at index %s", index)
     items = ["apple", "banana", "cherry"]
-    if index < 0 or index >= len(items):
-        raise HTTPException(status_code=400, detail="Index out of range")
-    # BUG: IndexError when index >= 3 (e.g. /items?index=10)
-    item = items[index]
-    return {"status": "ok", "index": str(index), "item": item}
+    log.info("Fetching item at index %s", index)
+        items = ["apple", "banana", "cherry"]
+        if index < 0 or index >= len(items):
+            raise HTTPException(status_code=400, detail=f"Index {index} is out of bounds for list of length {len(items)}")
+        item = items[index]
+        return {"status": "ok", "index": str(index), "item": item}
 
 @app.get("/config")
 async def get_config(key: str = "app_name") -> dict[str, str]:
