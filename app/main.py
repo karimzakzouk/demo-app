@@ -1,8 +1,7 @@
 """demo-app — a small FastAPI service for testing K8s deployments."""
 from __future__ import annotations
 import os, logging
-from fastapi import FastAPI
-
+from fastapi import FastAPI, HTTPException\n
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("demo-app")
 
@@ -62,10 +61,7 @@ async def format_price(price: int = 100) -> dict[str, str]:
 async def get_items(index: int = 0) -> dict[str, str]:
     """Get item by index. BUG: no bounds check on the list."""
     log.info("Fetching item at index %s", index)
-    items = ["apple", "banana", "cherry"]
-    # BUG: IndexError when index >= 3 (e.g. /items?index=10)
-    item = items[index]
-    return {"status": "ok", "index": str(index), "item": item}
+    items = [\"apple\", \"banana\", \"cherry\"]\n    # BUG: IndexError when index >= 3 (e.g. /items?index=10)\n    if index < 0 or index >= len(items):\n        raise HTTPException(status_code=400, detail=f\"Index {index} is out of range for list of length {len(items)}\")\n    item = items[index]\n    return {"status": "ok", "index": str(index), "item": item}
 
 @app.get("/config")
 async def get_config(key: str = "app_name") -> dict[str, str]:
