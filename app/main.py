@@ -52,7 +52,7 @@ async def get_user(user_id: int = 1) -> dict[str, str]:
 async def format_price(price: int = 100) -> dict[str, str]:
     """Format a price string. BUG: concatenates string with int directly."""
     log.info("Formatting price %s", price)
-    label = "Price: $" + price + " USD"
+    label = "Price: $" + str(price) + " USD"
     return {"status": "ok", "label": label}
 
 @app.get("/items")
