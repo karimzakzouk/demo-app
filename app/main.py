@@ -127,10 +127,10 @@ async def calculate_order_total(order_id: str = "ORD-001") -> dict[str, str]:
         subtotal += quantities[i] * prices[i]
 
     # Apply bulk discount: orders with >1 item get 10% off
-    # BUG: divides by (len(items) - 1) which is 0 when there's only 1 item
-    discount_rate = 0.10 if len(items) > 1 else 0.0
-    discount_per_item = (subtotal * discount_rate) / (len(items) - 1)
-    total_discount = discount_per_item * len(items)
+    if len(items) > 1:
+        total_discount = subtotal * 0.10
+    else:
+        total_discount = 0.0
     total = subtotal - total_discount
 
     return {
