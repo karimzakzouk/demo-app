@@ -37,6 +37,9 @@ async def pay(amount: int = 100) -> dict[str, str]:
 async def divide(a: int = 10, b: int = 1) -> dict[str, str]:
     """Divide a by b. BUG: no zero check — calling /divide?a=10&b=0 crashes."""
     log.info("Dividing %s by %s", a, b)
+    if b == 0:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="Divisor b cannot be zero")
     result = a / b  # ZeroDivisionError when b=0
     return {"status": "ok", "result": str(result)}
 
