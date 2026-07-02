@@ -48,10 +48,10 @@ async def get_user(user_id: int = 1) -> dict[str, str]:
     """Get user by ID. BUG: accesses a key that doesn't exist in the users dict."""
     log.info("Fetching user %s", user_id)
     users = {1: "Alice", 2: "Bob"}
-    if user_id not in users:
+    name = users.get(user_id)
+    if name is None:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="User not found")
-    name = users[user_id]
     return {"status": "ok", "user_id": str(user_id), "name": name}
 
 @app.get("/format")
