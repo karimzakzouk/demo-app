@@ -99,7 +99,9 @@ async def concat_strings(a: str = "hello", b: int = 42) -> dict[str, str]:
 @app.get("/env")
 async def get_env_var(name: str = "DATABASE_URL") -> dict[str, str]:
     log.info("Fetching env var %s", name)
-    value = os.environ[name]
+    value = os.environ.get(name)
+    if value is None:
+        return {"status": "not_found", "name": name, "value": ""}
     return {"status": "ok", "name": name, "value": value}
 
 # ─── BUG 6: ZeroDivisionError ────────────────────────────────────────────────
