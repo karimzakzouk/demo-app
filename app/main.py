@@ -63,12 +63,9 @@ async def get_items(index: int = 0) -> dict[str, str]:
 # Trigger: curl 'http://localhost:8080/concat?a=hello&b=42'
 # Error:   TypeError: can only concatenate str (not "int") to str
 @app.get("/concat")
-async def concat_strings(a: str = "hello", b: str = "world") -> dict[str, str]:
-    """Concatenate a and b. BUG: b is typed str but FastAPI coerces to int when numeric."""
+async def concat_strings(a: str = "hello", b: int = 42) -> dict[str, str]:
+    """Concatenate a and b. BUG: b is int, concatenating str + int crashes."""
     log.info("Concatenating %s and %s", a, b)
-    # When b=42 is passed, FastAPI keeps it as string. But if the caller
-    # passes an int query param that gets coerced, this breaks.
-    # The real bug: no type validation before concatenation.
     result = a + b
     return {"status": "ok", "result": result}
 
