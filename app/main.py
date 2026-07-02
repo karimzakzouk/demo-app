@@ -101,8 +101,7 @@ async def get_env_var(name: str = "DATABASE_URL") -> dict[str, str]:
     log.info("Fetching env var %s", name)
     value = os.environ.get(name)
     if value is None:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Environment variable not found")
+        return {"status": "not_found", "name": name, "value": ""}
     return {"status": "ok", "name": name, "value": value}
 
 # ─── BUG 6: ZeroDivisionError ────────────────────────────────────────────────
