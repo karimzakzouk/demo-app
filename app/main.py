@@ -288,8 +288,14 @@ async def get_account_balance(account_id: str = "ACC-001") -> dict[str, str]:
 async def withdraw(account_id: str = "ACC-001", amount: float = 0) -> dict[str, str]:
     """Withdraw from account. BUG: no account existence check + no balance check."""
     log.info("Withdrawing %s from account %s", amount, account_id)
-    account = ACCOUNTS[account_id]  # BUG: KeyError on unknown account_id
-    account["balance"] -= amount  # BUG: no overdraft check — balance can go negative
+    if account_id not in ACCOUNTS:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Account not found")
+    account = ACCOUNTS[account_id]
+    if account["balance"] < amount:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="Insufficient funds")
+    account["balance"] -= amount
     return {
         "status": "ok",
         "account_id": account_id,
