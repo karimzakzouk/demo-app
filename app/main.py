@@ -66,8 +66,11 @@ async def format_price(price: int = 100) -> dict[str, str]:
 async def get_config(key: str = "app_name") -> dict[str, str]:
     log.info("Fetching config key %s", key)
     config = {"app_name": "demo-app", "version": "1.0.0"}
-    value = config.get(key).upper()
-    return {"status": "ok", "key": key, "value": value}
+    value = config.get(key)
+    if value is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Config key not found")
+    return {"status": "ok", "key": key, "value": value.upper()}
 
 # ─── BUG 2: ValueError ───────────────────────────────────────────────────────
 # Trigger: curl 'http://localhost:8080/parse?text=abc'
